@@ -11,4 +11,16 @@ const createUser = asyncHandler(async (req, res) => {
         throw new Error("User Already Exists");
     }
 });
-module.exports = { createUser };
+
+const loginUserCtrl = asyncHandler(async (req, res) => {
+    const {email, password} = req.body;
+    // Buscar si existe
+    const findUser = await User.findOne({email:email});
+    if(findUser && await findUser.isPasswordMatched(password)){
+        res.json(findUser);
+    } else {
+        throw new Error("Credenciales Invalidas");
+    }
+});
+
+module.exports = { createUser, loginUserCtrl };
