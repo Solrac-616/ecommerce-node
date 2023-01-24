@@ -27,8 +27,18 @@ var userSchema = new mongoose.Schema({
     role:{
         type:String,
         default:"User"
-    }
-});
+    },
+    cart:{
+        type:Array,
+        default:[],
+    },
+    address: [{ type:mongoose.Schema.Types.ObjectId, ref:"Address"}],
+    wishlist: [{ type:mongoose.Schema.Types.ObjectId, ref:"Product"}],
+},
+{
+    timestamps: true,
+} 
+);
 
 userSchema.pre('save', async function(next){
     const salt = await bcrypt.genSaltSync(10);

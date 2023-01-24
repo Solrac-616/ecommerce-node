@@ -47,7 +47,8 @@ const updateUser = asyncHandler(async (req, res) => {
         {
             new: true,
         }
-        );
+    );
+    res.json(updateUser);
     } catch (error) {
         throw new Error(error);
     }
@@ -80,7 +81,7 @@ const getaUser = asyncHandler(async (req, res) => {
 const deleteaUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
     try {
-        const getaUser = await User.findByIdAndDelete(id);
+        const deleteaUser = await User.findByIdAndDelete(id);
         res.json({
             deleteaUser,
         });
@@ -89,4 +90,4 @@ const deleteaUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser};
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser};
