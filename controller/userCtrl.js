@@ -34,6 +34,25 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     }
 });
 
+// UPDATE - ACTUALIZAR USUARIO
+const updateUser = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    try {
+        const updateUser = await User.findByIdAndUpdate(id, {
+            firstname: req?.body?.firstname,
+            lastname: req?.body?.lastname,
+            email: req?.body?.email,
+            mobile: req?.body?.mobile
+        },
+        {
+            new: true,
+        }
+        );
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 //TRAER TODOS LOS USUARIOS
 const getallUser = asyncHandler(async (req, res) => {
     try {
@@ -44,4 +63,30 @@ const getallUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser};
+//TRAER USUARIO ESPECIFICO
+const getaUser = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    try {
+        const getaUser = await User.findById(id);
+        res.json({
+            getaUser,
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+//BORRAR USUARIO ESPECIFICO
+const deleteaUser = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    try {
+        const getaUser = await User.findByIdAndDelete(id);
+        res.json({
+            deleteaUser,
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser};
