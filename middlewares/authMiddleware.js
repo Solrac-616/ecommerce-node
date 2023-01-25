@@ -20,4 +20,13 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
         throw new Error("No posee token de acceso");
     }
 });
-module.exports = {authMiddleware} ;
+const isAdmin = asyncHandler(async (req, res, next) => {
+    const {email} = req.user;
+    const adminUser = await User.findOne({email});
+    if (adminUser.role !== "admin") {
+        throw new Error("No eres administrador");
+    } else{
+        next();
+    }
+});
+module.exports = {authMiddleware, isAdmin} ;

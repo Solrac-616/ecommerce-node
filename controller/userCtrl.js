@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
+const validateMongoDbId = require("../utils/validateMongodbId");
 
 //REGISTRAR USUARIO
 const createUser = asyncHandler(async (req, res) => {
@@ -36,9 +37,11 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 // UPDATE - ACTUALIZAR USUARIO
 const updateUser = asyncHandler(async (req, res) => {
-    const {id} = req.params;
+    const {_id} = req.user;
     try {
-        const updateUser = await User.findByIdAndUpdate(id, {
+        const updateUser = await User.findByIdAndUpdate(
+        _id,
+        {
             firstname: req?.body?.firstname,
             lastname: req?.body?.lastname,
             email: req?.body?.email,
@@ -90,4 +93,46 @@ const deleteaUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser};
+//Bloquear Usuario
+const blockUser = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    try {
+        const block = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: true,
+            },
+            {
+                new: true,
+            }
+        );
+        res.json({
+            message: "Usuario bloqueado",
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+//Desbloquear Usuario
+const unblockUser = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    try {
+        const block = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: false,
+            },
+            {
+                new: true,
+            }
+        );
+        res.json({
+            message: "Usuario desbloqueado",
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser};
