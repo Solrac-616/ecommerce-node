@@ -38,6 +38,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 // UPDATE - ACTUALIZAR USUARIO
 const updateUser = asyncHandler(async (req, res) => {
     const {_id} = req.user;
+    validateMongoDbId(_id);
     try {
         const updateUser = await User.findByIdAndUpdate(
         _id,
@@ -70,6 +71,7 @@ const getallUser = asyncHandler(async (req, res) => {
 //TRAER USUARIO ESPECIFICO
 const getaUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    validateMongoDbId(id);
     try {
         const getaUser = await User.findById(id);
         res.json({
@@ -83,6 +85,7 @@ const getaUser = asyncHandler(async (req, res) => {
 //BORRAR USUARIO ESPECIFICO
 const deleteaUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    validateMongoDbId(id);
     try {
         const deleteaUser = await User.findByIdAndDelete(id);
         res.json({
@@ -96,8 +99,9 @@ const deleteaUser = asyncHandler(async (req, res) => {
 //Bloquear Usuario
 const blockUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    validateMongoDbId(id);
     try {
-        const block = await User.findByIdAndUpdate(
+        const blockusr = await User.findByIdAndUpdate(
             id,
             {
                 isBlocked: true,
@@ -106,9 +110,7 @@ const blockUser = asyncHandler(async (req, res) => {
                 new: true,
             }
         );
-        res.json({
-            message: "Usuario bloqueado",
-        });
+        res.json(blockusr);
     } catch (error) {
         throw new Error(error);
     }
@@ -117,8 +119,9 @@ const blockUser = asyncHandler(async (req, res) => {
 //Desbloquear Usuario
 const unblockUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
+    validateMongoDbId(id);
     try {
-        const block = await User.findByIdAndUpdate(
+        const unblock = await User.findByIdAndUpdate(
             id,
             {
                 isBlocked: false,
@@ -127,9 +130,7 @@ const unblockUser = asyncHandler(async (req, res) => {
                 new: true,
             }
         );
-        res.json({
-            message: "Usuario desbloqueado",
-        });
+        res.json(unblock);
     } catch (error) {
         throw new Error(error);
     }
