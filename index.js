@@ -10,14 +10,17 @@ const cookieParser = require("cookie-parser");
 dbConnect();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/user/auth', authRouter);
+app.get("/", (req, res) => {
+  res.send("API Status ✅");
+});
+app.use("/api/user/auth", authRouter);
 
 app.use(notFound);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Server is running at PORT ${PORT}`);
+  console.log(`Server is running at PORT ${PORT}`);
 });
