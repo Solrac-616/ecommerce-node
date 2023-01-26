@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const { generateRefreshToken } = require("../config/refreshToken");
-
+const jwt = require("jsonwebtoken");
 //REGISTRAR USUARIO
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -32,7 +32,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
         {
             new: true
         });
-        res.cookie('refreshToken:', refreshToken, {
+        res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 72 * 60 * 60 * 1000,
         });
@@ -47,6 +47,47 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     } else {
         throw new Error("Credenciales Invalidas");
     }
+});
+
+// HANDLE - MANEJO DE REFRESCAR TOKEN
+const handleRefreshToken = asyncHandler (async(req, res) => {
+    const cookie = req.cookies;
+    if (!cookie?.refreshToken) throw new Error("No hay token nuevo en Cookies");
+    const refreshToken = cookie.refreshToken;
+    
+    const user = await User.findOne({ refreshToken });
+    
+    if (!user) throw new Error("No existe el refresh token en la database o no se encontro");
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+        if (err || user.id !== decoded.id) {
+            throw new Error("Algo esta mal con el Nuevo Token");
+        }
+        const accesToken = generateToken(user?._id);
+        res.json({accesToken});
+    });
+});
+
+//CERRAR SESION
+const logout = asyncHandler(async(req, res) => {
+    const cookie = req.cookies;
+    if (!cookie?.refreshToken) throw new Error("No hay token en Cookies");
+    const refreshToken = cookie.refreshToken;
+    const user = await User.findOne({refreshToken});
+    if (!user) {
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true,
+        });
+        return res.sendStatus(204);
+    }
+    await User.findOneAndUpdate(refreshToken, {
+        refreshToken: ""
+    });
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+    });
+    res.sendStatus(204);
 });
 
 // UPDATE - ACTUALIZAR USUARIO
@@ -150,4 +191,4 @@ const unblockUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser};
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout};
