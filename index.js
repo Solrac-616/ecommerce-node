@@ -6,6 +6,7 @@ const app = express();
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
+const productRouter = require("./routes/productRoute");
 const cookieParser = require("cookie-parser");
 dbConnect();
 
@@ -17,6 +18,8 @@ app.get("/", (req, res) => {
   res.send("API Status ✅");
 });
 app.use("/api/user/auth", authRouter);
+app.use("/api/product", productRouter);
+
 
 app.use(notFound);
 app.use(errorHandler);
