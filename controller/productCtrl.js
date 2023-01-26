@@ -1,15 +1,21 @@
 const Product = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
+const slugify = require("slugify");
 
 //CREAR PRODUCTO
 const createProduct = asyncHandler (async (req, res) => {
     try {
+        if (req.body.title) {
+            req.body.slug = slugify(req.body.title);
+        }
         const newProduct = await Product.create(req.body);
         res.json(newProduct);
     } catch (error) {
         throw new Error(error);
     }
 });
+
+
 
 //TRAER PRODUCTO POR ID
 const getaProduct = asyncHandler (async (req, res) => {
