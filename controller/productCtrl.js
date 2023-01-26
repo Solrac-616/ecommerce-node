@@ -15,7 +15,33 @@ const createProduct = asyncHandler (async (req, res) => {
     }
 });
 
+//ACTUALIZAR PRODUCTO
+const updateProduct = asyncHandler (async (req, res) => {
+    const id = req.params;
+    console.log(id)
+    try {
+        if (req.body.title) {
+            req.body.slug = slugify(req.body.title);
+        }
+        const updateProduct = await Product.findOneAndUpdate( {id}, req.body, {
+            new:true,
+        });
+        res.json(updateProduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
+//BORRAR PRODUCTO
+const deleteProduct = asyncHandler (async (req, res) => {
+    const id = req.params;
+    try {
+        const deleteProduct = await Product.findOneAndDelete(id);
+        res.json(deleteProduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
 //TRAER PRODUCTO POR ID
 const getaProduct = asyncHandler (async (req, res) => {
@@ -38,4 +64,27 @@ const getAllProduct = asyncHandler (async (req, res) => {
     }
 });
 
-module.exports = {createProduct, getaProduct, getAllProduct};
+//FILTRAR PRODUCTOS
+const filterProduct = asyncHandler (async (req, res) =>{
+    const {minprice, maxprice, color, category, availablity, brand} = req.params;
+    console.log(req.query);
+
+    try {
+        const filterProduct = await Product.find({
+            price:{
+                $gte: minprice,
+                $lte: maxprice,
+            },
+            category,
+            brand,
+            color,
+        });
+        res.json(filterProduct);
+    } catch (error) {
+        res.json(error);
+    }
+
+    res.json({minprice, maxprice, color, category, availablity, brand});
+});
+
+module.exports = {createProduct, getaProduct, getAllProduct, updateProduct, deleteProduct};
