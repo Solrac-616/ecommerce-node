@@ -17,13 +17,13 @@ const createProduct = asyncHandler (async (req, res) => {
 
 //ACTUALIZAR PRODUCTO
 const updateProduct = asyncHandler (async (req, res) => {
-    const id = req.params;
+    const id = req.params.id;
     console.log(id)
     try {
         if (req.body.title) {
             req.body.slug = slugify(req.body.title);
         }
-        const updateProduct = await Product.findOneAndUpdate( {id}, req.body, {
+        const updateProduct = await Product.findByIdAndUpdate( id, req.body, {
             new:true,
         });
         res.json(updateProduct);
@@ -34,9 +34,9 @@ const updateProduct = asyncHandler (async (req, res) => {
 
 //BORRAR PRODUCTO
 const deleteProduct = asyncHandler (async (req, res) => {
-    const id = req.params;
+    const id = req.params.id;
     try {
-        const deleteProduct = await Product.findOneAndDelete(id);
+        const deleteProduct = await Product.findByIdAndDelete(id);
         res.json(deleteProduct);
     } catch (error) {
         throw new Error(error);
