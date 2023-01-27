@@ -3,7 +3,9 @@ const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
 const validateMongoDbId = require("../utils/validateMongodbId");
 const { generateRefreshToken } = require("../config/refreshToken");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const { sendEmail } = require("./emailCtrl");
 //REGISTRAR USUARIO
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -207,4 +209,33 @@ const updatePassword = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword};
+//RECUPERAR CONTRASEÑA
+const forgotPasswordToken = asyncHandler(async (req, res) => {
+    const {email} = req.body;
+    const user = await User.findOne({email});
+    if (!user) throw new Error("No se encontro usuario con este email");
+    try {
+        const token = await user.createPasswordResetToken();
+        await user.save();
+        const resetURL = `Por favor ingresa al siguiente Link para resetear tu contraseña en los siguientes 10 minutos <a href='http://localhost:4000/api/user/auth/reset-password/${token}'> click aquí </a>`
+        const data = {
+            to: email,
+            text: "Rippley - Eso ta' listo",
+            subject: "Recuperar contraseña",
+            html: resetURL,
+        };
+        sendEmail(data);
+        res.json(token);
+    } catch (error) {
+        throw new Error(error); 
+    }
+});
+
+const resetPassword = asyncHandler (async (req, res) => {
+    const { password } = req.body;
+    const { token } = req.body;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = 
+});
+
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken};
