@@ -44,6 +44,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             mobile: findUser?.mobile,
             token: generateToken(findUser?._id),
         });
+        res.json(updateuser);
     } else {
         throw new Error("Credenciales Invalidas");
     }
