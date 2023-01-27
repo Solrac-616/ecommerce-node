@@ -124,7 +124,7 @@ const getallUser = asyncHandler(async (req, res) => {
     }
 });
 
-//TRAER USUARIO ESPECIFICO
+//TRAER USUARIO ESPECIFICO POR ID
 const getaUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
     validateMongoDbId(id);
@@ -138,7 +138,7 @@ const getaUser = asyncHandler(async (req, res) => {
     }
 });
 
-//BORRAR USUARIO ESPECIFICO
+//BORRAR USUARIO ESPECIFICO POR ID
 const deleteaUser = asyncHandler(async (req, res) => {
     const {id} = req.params;
     validateMongoDbId(id);
@@ -192,4 +192,19 @@ const unblockUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout};
+//CAMBIAR CONTRASEÑA
+const updatePassword = asyncHandler(async (req, res) => {
+    const {_id} = req.user;
+    const {password} = req.body;
+    validateMongoDbId(_id);
+    const user = await User.findById(_id);
+    if (password) {
+        user.password = password;
+        const updatedPassword = await user.save();
+        res.json(updatedPassword);
+    } else {
+        res.json(user);
+    }
+});
+
+module.exports = { createUser, loginUserCtrl, getallUser, getaUser, deleteaUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword};
