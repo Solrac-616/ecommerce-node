@@ -56,8 +56,11 @@ const getaProduct = asyncHandler (async (req, res) => {
 
 //TRAER TODOS LOS PRODUCTOS
 const getAllProduct = asyncHandler (async (req, res) => {
+    console.log(req.query);
     try {
-        const getallProduct = await Product.find();
+        const getallProduct = await Product.find({
+            
+        });
         res.json(getallProduct);
     } catch (error) {
         throw new Error(error);
