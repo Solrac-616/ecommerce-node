@@ -16,7 +16,7 @@ const createBlog = asyncHandler(async (req, res) =>{
     }
 });
 
-//ACTUALIZAR BLOG
+//ACTUALIZAR BLOG POR ID
 const updateBlog = asyncHandler(async (req, res) =>{
     const {id} = req.params;
     try {
@@ -29,4 +29,25 @@ const updateBlog = asyncHandler(async (req, res) =>{
     }
 });
 
-module.exports = {createBlog};
+//TRAER BLOG POR ID
+const getBlog = asyncHandler(async (req, res) =>{
+    const {id} = req.params;
+    try {
+        const getBlog = await Blog.findById(id);
+        const updateViews = await Blog.findByIdAndUpdate(
+            id,
+            {
+                $inc: {numViews: 1},
+            },
+            { new: true }
+        )
+        res.json(updateViews);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+//TRAER TODOS LOS BLOGS
+
+
+module.exports = {createBlog, updateBlog, getBlog};
