@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api/user/auth", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
-app.use("/category", categoryRouter);
+app.use("/api/category", categoryRouter);
 
 
 app.use(notFound);
