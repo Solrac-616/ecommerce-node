@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 
@@ -93,7 +94,6 @@ const getAllProduct = asyncHandler (async (req, res) => {
             const productCount = await Product.countDocuments();
             if (skip >= productCount) throw new Error("esta pagina no existe");
         }
-        console.log(page, limit, skip);
 
         const product = await query;
         res.json(product);
@@ -102,27 +102,38 @@ const getAllProduct = asyncHandler (async (req, res) => {
     }
 });
 
-//FILTRAR PRODUCTOS
-const filterProduct = asyncHandler (async (req, res) =>{
-    const {minprice, maxprice, color, category, availablity, brand} = req.params;
-    console.log(req.query);
-
+const addToWishlist = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { prodId } = req.body;
     try {
-        const filterProduct = await Product.find({
-            price:{
-                $gte: minprice,
-                $lte: maxprice,
-            },
-            category,
-            brand,
-            color,
-        });
-        res.json(filterProduct);
+        const user = await User.findById(_id);
+        const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
+        if (alreadyadded) {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $pull: {wishlist: prodId},
+                },
+                {
+                    new: true,
+                }
+            );
+            res.json(user);
+        } else {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $push: {wishlist: prodId},
+                },
+                {
+                    new: true,
+                }
+            );
+            res.json(user);
+        }
     } catch (error) {
-        res.json(error);
+        throw new Error(error);
     }
-
-    res.json({minprice, maxprice, color, category, availablity, brand});
 });
 
-module.exports = {createProduct, getaProduct, getAllProduct, updateProduct, deleteProduct};
+module.exports = {createProduct, getaProduct, getAllProduct, updateProduct, deleteProduct, addToWishlist};
