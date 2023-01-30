@@ -2,6 +2,7 @@ const Coupon = require("../models/couponModel");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
 
+//CREAR CUPON
 const createCoupon = asyncHandler(async (req, res) => {
     try {
         const newCoupon = await Coupon.create(req.body);

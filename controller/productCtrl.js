@@ -102,6 +102,7 @@ const getAllProduct = asyncHandler (async (req, res) => {
     }
 });
 
+//LISTA DE DESEOS DE USUARIOS
 const addToWishlist = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { prodId } = req.body;
@@ -136,6 +137,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
     }
 });
 
+//SISTEMA DE CALIFICACION Y COMENTARIOS
 const rating = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { star, prodId, comment } = req.body;
