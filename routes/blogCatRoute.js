@@ -1,5 +1,11 @@
 const express = require("express");
-const { createBlogcategory, updateBlogcategory, deleteBlogcategory, getBlogcategory, getAllBlogcategory } = require("../controller/blogCatCtrl");
+const {
+  createBlogcategory,
+  updateBlogcategory,
+  deleteBlogcategory,
+  getBlogcategory,
+  getAllBlogcategory,
+} = require("../controller/blogCatCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
