@@ -6,9 +6,9 @@ cloudinary.config({
     api_secret: process.env.SECRET_KEY 
 });
 
-const cloudinaryUploadImg = async (fileToUploads) => {
+const cloudinaryUploadImg = async (fileToUploads) =>  {
     return new Promise((resolve) => {
-        cloudinary.UploadStream.upload(fileToUploads, (results) => {
+        cloudinary.uploader.upload(fileToUploads, (result) => {
             resolve(
                 {
                     url: result.secure_url,
