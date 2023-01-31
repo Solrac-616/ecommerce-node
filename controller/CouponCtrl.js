@@ -27,7 +27,7 @@ const updateCoupon = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id);
     try {
-        const updateCoupon = await Coupon.findByIdAndUpdate(id, req,body, {
+        const updateCoupon = await Coupon.findByIdAndUpdate(id, req.body, {
             new: true,
         });
         res.json(updateCoupon);
