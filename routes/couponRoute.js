@@ -1,5 +1,10 @@
 const express = require("express");
-const { createCoupon, getAllCoupons, updateCoupon, deleteCoupon } = require("../controller/CouponCtrl");
+const {
+  createCoupon,
+  getAllCoupons,
+  updateCoupon,
+  deleteCoupon,
+} = require("../controller/CouponCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 

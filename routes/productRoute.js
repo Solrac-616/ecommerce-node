@@ -16,6 +16,7 @@ const {
 } = require("../middlewares/uploadimages");
 const router = express.Router();
 
+//RUTAS---
 router.post("/", authMiddleware, isAdmin, createProduct);
 router.put(
   "/upload/:id", 
