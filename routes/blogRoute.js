@@ -10,7 +10,7 @@ const {
   uploadImages,
 } = require("../controller/blogCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
-const { blogImgResize, uploadPhoto } = require("../middlewares/uploadImage");
+const { blogImgResize, uploadPhoto } = require("../middlewares/uploadimages");
 const router = express.Router();
 
 router.post("/", authMiddleware, isAdmin, createBlog);

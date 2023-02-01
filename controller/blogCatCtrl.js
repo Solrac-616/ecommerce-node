@@ -60,4 +60,10 @@ const getAllBlogcategory = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createBlogcategory, updateBlogcategory, deleteBlogcategory, getBlogcategory, getAllBlogcategory};
+module.exports = {
+  createBlogcategory,
+  updateBlogcategory,
+  deleteBlogcategory,
+  getBlogcategory,
+  getAllBlogcategory,
+};

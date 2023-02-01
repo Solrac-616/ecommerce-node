@@ -21,7 +21,7 @@ const createProduct = asyncHandler (async (req, res) => {
 //ACTUALIZAR PRODUCTO
 const updateProduct = asyncHandler (async (req, res) => {
     const id = req.params.id;
-    console.log(id)
+    validateMongoDbId(id);
     try {
         if (req.body.title) {
             req.body.slug = slugify(req.body.title);
@@ -64,7 +64,6 @@ const getAllProduct = asyncHandler (async (req, res) => {
         const queryObj = { ...req.query};
         const excludeFields = ["page", "sort", "limit", "fields"];
         excludeFields.forEach((el) => delete queryObj[el]);
-        console.log(queryObj);
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
@@ -90,13 +89,11 @@ const getAllProduct = asyncHandler (async (req, res) => {
         const page = req.query.page;
         const limit = req.query.limit;
         const skip = (page - 1) * limit;
-        console.log(page, limit, skip);
         query = query.skip(skip).limit(limit);
         if (req.query.page) {
             const productCount = await Product.countDocuments();
             if (skip >= productCount) throw new Error("esta pagina no existe");
         }
-
         const product = await query;
         res.json(product);
     } catch (error) {
@@ -160,7 +157,6 @@ const rating = asyncHandler(async (req, res) => {
                     new: true,
                 }
             );
-            //res.json(updateRating);
         } else {
             const rateProduct = await Product.findByIdAndUpdate(
                 prodId,
@@ -177,11 +173,12 @@ const rating = asyncHandler(async (req, res) => {
                     new: true,
                 }
             );
-            //res.json(rateProduct);
         }
         const getallratings = await Product.findById(prodId);
         let totalRating = getallratings.ratings.length;
-        let ratingsum = getallratings.ratings.map((item) => item.star).reduce((prev, curr) => prev + curr, 0);
+        let ratingsum = getallratings.ratings
+            .map((item) => item.star)
+            .reduce((prev, curr) => prev + curr, 0);
         let actualRating = Math.round(ratingsum / totalRating);
         let finalproduct = await Product.findByIdAndUpdate(
             prodId,
