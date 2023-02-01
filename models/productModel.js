@@ -47,6 +47,7 @@ var productSchema = new mongoose.Schema({
         type:String,
         required: true,
     },
+    tags: String,
     ratings:[
         {
             star:Number,
@@ -54,7 +55,7 @@ var productSchema = new mongoose.Schema({
             postedby: {
                 type: mongoose.Schema.Types.ObjectId, 
                 ref: "User",
-            }
+            },
         },
     ],
     totalrating: {

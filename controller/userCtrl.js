@@ -1,4 +1,10 @@
 const User = require("../models/userModel");
+const Product = require("../models/productModel");
+const Cart = require("../models/cartModel");
+const Coupon = require("../models/couponModel");
+const Order = require("../models/orderModel");
+const uniqid = require("uniqid");
+
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
 const validateMongoDbId = require("../utils/validateMongodbId");
@@ -6,6 +12,7 @@ const { generateRefreshToken } = require("../config/refreshToken");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("./emailCtrl");
+
 //REGISTRAR USUARIO
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -147,6 +154,27 @@ const updateUser = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 });
+
+// DIRECCION DE USUARIO
+const saveAddress = asyncHandler(async (req, res, next) => {
+    const { _id } = req.user;
+    validateMongoDbId(_id);
+  
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        {
+          address: req?.body?.address,
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(updatedUser);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
 
 //TRAER TODOS LOS USUARIOS
 const getallUser = asyncHandler(async (req, res) => {
