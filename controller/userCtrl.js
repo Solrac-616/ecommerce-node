@@ -18,7 +18,6 @@ const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
     const findUser = await User.findOne({email:email});
     if (!findUser) {
-        //Crear nuevo usuario
         const newUser = await User.create(req.body);
         res.json(newUser);
     } else {
@@ -31,7 +30,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
     // Buscar si existe
     const findUser = await User.findOne({email});
-    if(findUser && await findUser.isPasswordMatched(password)){
+    if(findUser && (await findUser.isPasswordMatched(password))){
         const refreshToken = await generateRefreshToken(findUser?._id);
         const updateuser = await User.findByIdAndUpdate(
         findUser.id,
@@ -89,14 +88,13 @@ const loginAdmin = asyncHandler(async (req, res) => {
     } else {
       throw new Error("Invalid Credentials");
     }
-  });
+});
 
 // HANDLE - MANEJO DE REFRESCAR TOKEN
 const handleRefreshToken = asyncHandler (async(req, res) => {
     const cookie = req.cookies;
     if (!cookie?.refreshToken) throw new Error("No hay token nuevo en Cookies");
     const refreshToken = cookie.refreshToken;
-    
     const user = await User.findOne({ refreshToken });
     
     if (!user) throw new Error("No existe el refresh token en la database o no se encontro");
@@ -123,7 +121,7 @@ const logout = asyncHandler(async(req, res) => {
         return res.sendStatus(204);
     }
     await User.findOneAndUpdate(refreshToken, {
-        refreshToken: ""
+        refreshToken: "",
     });
     res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -312,7 +310,8 @@ const resetPassword = asyncHandler (async (req, res) => {
 const getWishlist = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     try {
-        const findUser = await User
+      const findUser = await User.findById(_id).populate("wishlist");
+      res.json(findUser);
     } catch (error) {
         throw new Error(error);
     }
