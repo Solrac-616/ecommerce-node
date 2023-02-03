@@ -21,11 +21,11 @@ const morgan  = require("morgan");
 dbConnect();
 
 
-const whiteList = ['http://localhost:3000', 'http://192.168.1.149:3000']
+//const whiteList = ['http://localhost:3000', 'http://192.168.1.149:3000']
 
-app.use(cors({ origin: whiteList}))
+//app.use(cors({ origin: whiteList}))
 
-//app.use(cors())
+app.use(cors())
 
 app.get("/", (req, res) => {
   res.send("API Status ✅");
