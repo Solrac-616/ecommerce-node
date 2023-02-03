@@ -3,6 +3,7 @@ const express = require("express");
 const dbConnect = require("./config/dbConnect");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const app = express();
+const cors = require('cors');
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
@@ -18,6 +19,13 @@ const uploadRouter = require("./routes/uploadRoute");
 const cookieParser = require("cookie-parser");
 const morgan  = require("morgan");
 dbConnect();
+
+
+const whiteList = ['http://localhost:3000', 'http://192.168.1.149:3000']
+
+app.use(cors({ origin: whiteList}))
+
+//app.use(cors())
 
 app.get("/", (req, res) => {
   res.send("API Status ✅");
