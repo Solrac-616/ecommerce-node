@@ -28,8 +28,12 @@ const createUser = asyncHandler(async (req, res) => {
 //LOGIN DE USUARIO
 const loginUserCtrl = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
-    // Buscar si existe
+
     const findUser = await User.findOne({email});
+    if(!findUser){
+      throw new Error("Este usuario no existe");
+    }
+    
     if(findUser && (await findUser.isPasswordMatched(password))){
         const refreshToken = await generateRefreshToken(findUser?._id);
         const updateuser = await User.findByIdAndUpdate(
@@ -53,7 +57,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             token: generateToken(findUser?._id),
         });
         res.json(updateuser);
-    } else {
+    } else  {
         throw new Error("Credenciales Invalidas");
     }
 });
@@ -275,17 +279,19 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
     try {
         const token = await user.createPasswordResetToken();
         await user.save();
-        const resetURL = `Por favor ingresa al siguiente Link para resetear tu contraseña en los siguientes 10 minutos <a href='http://localhost:4000/api/user/auth/reset-password/${token}'> click aquí </a>`
+        const resetURL = `Por favor ingresa al siguiente Link para resetear tu contraseña en los siguientes 10 minutos <a href='http://192.168.1.149:3000/reset-password'> click aquí </a>`
         const data = {
             to: email,
             text: "Rippley - Eso ta' listo",
             subject: "Recuperar contraseña",
             html: resetURL,
         };
+        
         sendEmail(data);
-        res.json(token);
+        res.json({token, user});
     } catch (error) {
         throw new Error(error);
+        
     }
 });
 
