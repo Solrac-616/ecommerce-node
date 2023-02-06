@@ -43,7 +43,9 @@ router.get("/getallorders", authMiddleware, isAdmin, getAllOrders);
 router.get("/wishlist", authMiddleware, getWishlist);
 router.get("/cart", authMiddleware, getUserCart);
 //Ruta para refrescar Token
-router.get("/refresh", handleRefreshToken);
+router.get("/refresh", authMiddleware, handleRefreshToken);
+//Ruta para refrescar Token
+router.get("/verify-sesion", authMiddleware);
 //ACTUALIZAR CONTRASEÑA
 router.put("/password", authMiddleware, updatePassword)
 
