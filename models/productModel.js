@@ -39,12 +39,12 @@ var productSchema = new mongoose.Schema({
     },
     portimage:{
         type:String,
-        default:"https://imgs.search.brave.com/jAjU0mtUfB6D9RXZQqURGXcB7uUV73m84ojlSY5v3fk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/aGFsbGFtaW50ZXJu/ZXQuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzAxL0lz/LWJsb2dnaW5nLXJl/bGV2YW50LWFueW1v/cmUuanBlZw",
+        default:"https://res.cloudinary.com/dxaejyiye/image/upload/v1675797401/defaultport_via596.png",
         required: true,
     },
     subimage:{
         type:String,
-        default:"https://imgs.search.brave.com/jAjU0mtUfB6D9RXZQqURGXcB7uUV73m84ojlSY5v3fk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/aGFsbGFtaW50ZXJu/ZXQuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzAxL0lz/LWJsb2dnaW5nLXJl/bGV2YW50LWFueW1v/cmUuanBlZw",
+        default:"https://res.cloudinary.com/dxaejyiye/image/upload/v1675797401/defaultsub_l83c6i.png",
         required: true,
     },
     images:[

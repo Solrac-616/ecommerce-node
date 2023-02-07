@@ -8,10 +8,19 @@ const slugify = require("slugify");
 //CREAR PRODUCTO
 const createProduct = asyncHandler (async (req, res) => {
     try {
-        if (req.body.title) {
-            req.body.slug = slugify(req.body.title);
+        
+        if (!req) {
+            
+        } else {
+            
         }
+
+        // if (req.body.title) {
+        //     req.body.slug = slugify(req.body.title);
+        // }
         const newProduct = await Product.create(req.body);
+        
+
         res.json(newProduct);
     } catch (error) {
         throw new Error(error);
