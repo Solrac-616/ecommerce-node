@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbId");
-const cloudinaryUploadImg = require("../utils/cloudinary")
+const cloudinaryUploadImg = require("../utils/cloudinary.js")
 const slugify = require("slugify");
 
 //CREAR PRODUCTO
@@ -201,11 +201,11 @@ const uploadImages = asyncHandler(async (req, res) => {
         const urls = [];
         const files = req.files;
         for (const file of files) {
-            const { path } = files;
+            const { path } = file;
             const newpath = await uploader(path);
             urls.push(newpath);
         }
-        const findProduct = await Product.findByIdAndUpda (
+        const findProduct = await Product.findByIdAndUpdate(
             id,
             {
                 images: urls.map((file) => {

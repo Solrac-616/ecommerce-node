@@ -46,7 +46,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
         });
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            maxAge: 72 * 60 * 60 * 1000,
+            maxAge: 3 * 24 * 60 * 60 * 1000,
         });
         res.json({
             id: findUser?._id,
@@ -96,9 +96,9 @@ const loginAdmin = asyncHandler(async (req, res) => {
 
 // HANDLE - MANEJO DE REFRESCAR TOKEN
 const handleRefreshToken = asyncHandler (async(req, res) => {
-    const cookie = req.cookies;
-    if (!cookie?.refreshToken) throw new Error("No hay token nuevo en Cookies");
-    const refreshToken = cookie.refreshToken;
+    const authToken = req.body;
+    if (!authToken?.refreshToken) throw new Error("No posee token de cambio");
+    const refreshToken = authToken.refreshToken;
     const user = await User.findOne({ refreshToken });
     
     if (!user) throw new Error("No existe el refresh token en la database o no se encontro");

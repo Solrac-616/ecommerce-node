@@ -37,6 +37,16 @@ var productSchema = new mongoose.Schema({
         type:Number,
         default: 0,
     },
+    portimage:{
+        type:String,
+        default:"https://imgs.search.brave.com/jAjU0mtUfB6D9RXZQqURGXcB7uUV73m84ojlSY5v3fk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/aGFsbGFtaW50ZXJu/ZXQuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzAxL0lz/LWJsb2dnaW5nLXJl/bGV2YW50LWFueW1v/cmUuanBlZw",
+        required: true,
+    },
+    subimage:{
+        type:String,
+        default:"https://imgs.search.brave.com/jAjU0mtUfB6D9RXZQqURGXcB7uUV73m84ojlSY5v3fk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/aGFsbGFtaW50ZXJu/ZXQuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzAxL0lz/LWJsb2dnaW5nLXJl/bGV2YW50LWFueW1v/cmUuanBlZw",
+        required: true,
+    },
     images:[
         {
             public_id: String,

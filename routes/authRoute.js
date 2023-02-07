@@ -45,7 +45,7 @@ router.get("/cart", authMiddleware, getUserCart);
 //Ruta para refrescar Token
 router.get("/refresh", authMiddleware, handleRefreshToken);
 //Ruta para refrescar Token
-router.get("/verify-sesion", authMiddleware);
+router.get("/verify-sesion", authMiddleware, getaUser);
 //ACTUALIZAR CONTRASEÑA
 router.put("/password", authMiddleware, updatePassword)
 
